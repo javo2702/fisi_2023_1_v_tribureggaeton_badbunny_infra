@@ -1,0 +1,854 @@
+openapi: 3.0.3
+info:
+  title: AKI NMS UX
+  description: Esta es una aplicación en la que los bodegueros podrán ofertar sus productos y los clientes podrán comprar
+  version: v1
+  
+servers:
+  - url: https://akinms/api/v1
+  
+tags:
+  - name: productos
+    description: Operaciones de productos
+    
+  - name: pedidos
+    description: Operaciones de pedidos
+   
+  - name: bodega
+    description: Operaciones de bodega
+    
+  - name: Usuarios
+    description: Operaciones de Usuarios
+
+paths:
+  /ux-gestion-productos/akinms/atencion-cliente/v1/listar-productos/{idBodega}:
+    get:
+      tags:
+        - productos
+      summary: listar productos por bodega
+      description: retorna una lista segun la bodega ingresada
+      operationId: getIdBodega
+      parameters:
+        - name: idBodega
+          in: path
+          description: Id de bodega a devolver
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/producto'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/producto'
+        '400':
+          description: Id invalido
+        '404':
+          description: bodega no encontrada
+      security:
+        - api_key: [jwt eJxt1MeOq1gUBdBfKXm...KqshJctUTsUwwYBPNpHWBS7AxmBy]
+        - aquinms_auth:
+            - write:akinms
+            - read:akinms
+  
+  /ux-gestion-productos/akinms/atencion-cliente/v1/consultar-productos/{idBodega}/{idCategoria}:
+     get:
+      tags:
+        - productos
+      summary: listar productos por bodega y categoria
+      description: retorna una lista de productos segun la bodega y categoria ingresada
+      operationId: getIdBodegaIdCategoria
+      parameters:
+        - name: idBodega
+          in: path
+          description: Id de bodega a devolver
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: idCategoria
+          in: path
+          description: Id de categoria a devolver
+          required: true
+          schema:
+            type: integer
+            format: int64 
+      responses:
+        '200':
+          description: operacion exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/producto'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/producto'
+        '400':
+          description: Id invalido
+        '404':
+          description: bodega o categoria no encontrada
+      security:
+        - api_key: [jwt eJxt1MeOq1gUBdBfKXm...KqshJctUTsUwwYBPNpHWBS7AxmBy]
+        - aquinms_auth:
+            - write:akinms
+            - read:akinms
+            
+  /ux-gestion-productos/akinms/atencion-cliente/v1/consultar-productos/{idBodega}:
+    get:
+      tags:
+        - productos
+      parameters:
+        - name: idBodega
+          in: path
+          description: Id de bodega a devolver
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: nombre
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: operacion exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/producto'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/producto'
+        '400':
+          description: Id invalido
+        '404':
+          description: bodega o nombre no encontrado no encontrada
+      security:
+        - api_key: [jwt eJxt1MeOq1gUBdBfKXm...KqshJctUTsUwwYBPNpHWBS7AxmBy]
+        - aquinms_auth:
+            - write:akinms
+            - read:akinms
+            
+  /ux-gestion-productos/akinms/atencion-cliente/v1/listar-categorias/{idBodega}:
+    get:
+      tags:
+        - productos
+      parameters:
+        - name: idBodega
+          in: path
+          description: Id de bodega a devolver
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Operacion exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/categoria'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/categoria'
+        '400':
+          description: Id invalido
+        '404':
+          description: bodega no encontrada
+      security:
+        - api_key: [jwt eJxt1MeOq1gUBdBfKXm...KqshJctUTsUwwYBPNpHWBS7AxmBy]
+        - aquinms_auth:
+            - write:akinms
+            - read:akinms
+            
+  /ux-gestion-productos/akinms/atencion-cliente/v1/consultar-productos/{idProducto}:
+    get:
+      tags:
+        - productos
+      parameters:
+        - name: idProducto
+          in: path
+          description: Id de producto a devolver
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: operacion exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/producto'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/producto'
+        '400':
+          description: Id invalido
+        '404':
+          description: producto no encontrada
+      security:
+        - api_key: [jwt eJxt1MeOq1gUBdBfKXm...KqshJctUTsUwwYBPNpHWBS7AxmBy]
+        - aquinms_auth:
+            - write:akinms
+            - read:akinms
+            
+  /ux-gestion-productos/akinms/atencion-cliente/v1/productos/registrar:
+    post:
+      tags:
+        - productos
+      summary: registrar un producto
+      description: se registrará un producto
+      operationId: crearProducto
+      requestBody:
+        description: objeto producto creado
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/producto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/producto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/producto'
+      responses:
+        default:
+          description: operacion exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/producto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/producto'
+  
+  /ux-gestion-productos/akinms/atencion-cliente/v1/actualizar/{idProducto}:
+    put:
+      tags:
+        - productos
+      summary: acatualizar producto
+      description: para actualizar un producto, debe estar registrado.
+      operationId: actializarProducto
+      parameters:
+        - name: idProducto
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Actulizar un producto registrado
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/producto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/producto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/producto'
+      responses:
+        default:
+          description: operacion exitosa
+  
+  /ux-gestion-productos/akinms/atencion-cliente/v1/eliminar/{idProducto}:
+    delete:
+      tags:
+        - productos
+      summary: eliminar producto
+      description: eliminar un producto dado un id de producto
+      operationId: eliminarProducto
+      parameters:
+        - name: api_key
+          in: header
+          description: ''
+          required: false
+          schema:
+            type: string
+        - name: idProducto
+          in: path
+          description: Producto eliminado
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: id de producto invalido
+      security:
+        - aquinms_auth:
+            - write:akinms
+            - read:akinms
+  
+  /ux-gestion-pedidos/akinms/atencion-cliente/v1/consultar-cliente/{idCliente}/{idPedido}:
+    get:
+      tags:
+        - pedidos
+      summary: consultar pedido de cliente
+      parameters:
+        - name: idCliente
+          in: path
+          description: Id de cliente a devolver
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: idPedido
+          in: path
+          description: Id de pedico a devolver
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: operacion exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pedidos'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/pedidos'
+        '400':
+          description: Id invalido
+        '404':
+          description: cliente no encontrada
+      security:
+        - api_key: [jwt eJxt1MeOq1gUBdBfKXm...KqshJctUTsUwwYBPNpHWBS7AxmBy]
+        - aquinms_auth:
+            - write:akinms
+            - read:akinms
+  
+  /ux-gestion-pedidos/akinms/atencion-cliente/v1/consultar-pedidos/{idBodega}:
+    get:
+      tags:
+        - pedidos
+      summary: consultar pedidos por bodega
+      parameters:
+        - name: idBodega
+          in: path
+          description: Id de bodega a devolver
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Operacion exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pedidos'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/pedidos'
+        '400':
+          description: Id invalido
+        '404':
+          description: bodega no encontrada
+      security:
+        - api_key: [jwt eJxt1MeOq1gUBdBfKXm...KqshJctUTsUwwYBPNpHWBS7AxmBy]
+        - aquinms_auth:
+            - write:akinms
+            - read:akinms
+            
+  /ux-gestion-pedidos/akinms/atencion-cliente/v1/consultar-ventas/{idBodega}:
+    get:
+      tags:
+        - pedidos
+      summary: consultar ventas por fecha
+      parameters:
+        - name: idBodega
+          in: path
+          description: Id de bodega a devolver
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: fechainicio
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: fechafin
+          required: true
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: operacion exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/producto'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/producto'
+        '400':
+          description: Id invalido
+        '404':
+          description: bodega no encontrada
+      security:
+        - api_key: [jwt eJxt1MeOq1gUBdBfKXm...KqshJctUTsUwwYBPNpHWBS7AxmBy]
+        - aquinms_auth:
+            - write:akinms
+            - read:akinms
+  
+  /ux-gestion-pedidos/akinms/atencion-cliente/v1/registrar:
+    post:
+      tags:
+        - pedidos
+      summary: registrar un pedido
+      description: se registrará un pedido
+      operationId: crearPedido
+      requestBody:
+        description: objeto pedido creado
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pedidos'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/pedidos'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/pedidos'
+      responses:
+        default:
+          description: operacion exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pedidos'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/pedidos'
+  
+  /ux-gestion-pedidos/akinms/atencion-cliente/v1/actualizar-estado/{idBodega}:
+    put:
+      tags:
+        - pedidos
+      summary: acatualizar estado pedido
+      description: para actualizar un estado pedido, debe estar registrado.
+      operationId: actualizarPedido
+      parameters:
+        - name: idBodega
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Actulizar unestado de pedido registrado
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pedidos'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/pedidos'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/pedidos'
+      responses:
+        default:
+          description: operacion exitosa
+  
+  /ux-gestion-bodegas/akinms/atencion-cliente/v1/listar-bodegas:
+    get:
+      tags:
+        - bodega
+      summary: listar todas las bodegas
+      responses:
+        '200':
+          description: operacion exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bodega'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/bodega'
+        '404':
+          description: bodegas no encontradas
+      security:
+        - api_key: []
+        - aquinms_auth:
+            - write:akinms
+            - read:akinms
+  
+  /ux-gestion-bodegas/akinms/atencion-cliente/v1/consultar/{idBodega}: 
+    get:
+      tags:
+        - bodega
+      summary: consultar detalles de bodega
+      parameters:
+        - name: idBodega
+          in: path
+          description: Id de bodega a devolver
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: operacion exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bodega'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/bodega'
+        '400':
+          description: Id invalido
+        '404':
+          description: bodega no encontrada
+      security:
+        - api_key: []
+        - aquinms_auth:
+            - write:akinms
+            - read:akinms
+  
+  /ux-gestion-bodegas/akinms/atencion-cliente/v1/listar-bodega/premium:
+    get:
+      tags:
+        - bodega
+      summary: listar bodega premium
+      responses:
+        '200':
+          description: operacion exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bodega'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/bodega'
+        '404':
+          description: bodega no encontrada
+      security:
+        - api_key: []
+        - aquinms_auth:
+            - write:akinms
+            - read:akinms
+  
+  /ux-gestion-usuarios/akinms/atencion-cliente/v1/consultar/{idCliente}:
+    get:
+      tags:
+          - Usuarios
+      summary: consultar detalles de cliente
+      parameters:
+        - name: idCliente
+          in: path
+          description: Id de cliente a devolver
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: operacion exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/clientes'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/clientes'
+        '400':
+          description: Id invalido
+        '404':
+          description: cliente no encontrado
+      security:
+        - api_key: []
+        - aquinms_auth:
+            - write:akinms
+            - read:akinms
+  
+  /ux-gestion-usuarios/akinms/gestion-inventario/v1/busca-bodeguero/{idBodeguero}:
+    get:
+      tags:
+          - Usuarios
+      summary: buscar bodeguero
+      parameters:
+        - name: idBodeguero
+          in: path
+          description: Id de bodeguero a devolver
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: operacion exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bodeguero'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/bodeguero'
+        '400':
+          description: Id invalido
+        '404':
+          description: bodeguero no encontrado
+      security:
+        - api_key: []
+        - aquinms_auth:
+            - write:akinms
+            - read:akinms
+  
+  /ux-gestion-usuarios/akinms/atencion-cliente/v1/busca-cliente/{idCliente}:
+    get:
+      tags:
+          - Usuarios
+      summary: buscar clientes
+      parameters:
+        - name: idCliente
+          in: path
+          description: Id de cliente a devolver
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: operacion exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/clientes'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/clientes'
+        '400':
+          description: Id invalido
+        '404':
+          description: cliente no encontrado
+      security:
+        - api_key: []
+        - aquinms_auth:
+            - write:akinms
+            - read:akinms
+ 
+components:
+  schemas:
+  
+    ubicacion:
+      type: object   
+      properties:
+        idubicacion:
+          type: integer
+          format: int64
+          example: 1
+        nombre:
+          type: string
+          example: av mexico 1002
+        latitud:
+          type: string
+          example: 1234
+        longitud:
+          type: string
+          example: 4569
+   
+    bodega:
+      type: object
+      properties:
+        idbodega:
+          type: integer
+          format: int64
+          example: 10
+        nombre:
+          type: string
+          example: bodeguita de don juan
+        idubicacion:
+          $ref: '#/components/schemas/ubicacion'
+      xml:
+        name: bodega
+        
+    bodeguero:
+      type: object
+      properties:
+        id: 
+          type: integer
+          format: int64
+          example: 11
+        nombre:
+          type: string
+          example: Juan
+        apellido:
+          type: string
+          example: Perez
+        telefono: 
+          type: string
+          example: 985698569
+        idbodega:
+          $ref: '#/components/schemas/bodega'
+      xml:
+          name: bodeguero
+          
+    categoria:
+      type: object
+      properties:
+        idcategoria:
+          type: integer
+          format: int64
+          example: 1
+        nombre:
+          type: string
+          example: Bebidas Alcoholicas
+        img_url:
+          type: string
+          example: beb-alcoholicas-001
+      xml:
+        name: categorias
+        
+    clientes:
+      type: object
+      properties:
+        idcliente: 
+          type: integer
+          format: int64
+          example: 1
+        nombre:
+          type: string
+          example: Bruno
+        apellido:
+          type: string
+          example: Francescolli
+        direccion:
+          type: string
+          example: Av. Arequipa 122
+        telefono:
+          type: string
+          example: 956321475
+      xml: 
+        name: clientes
+    
+    pedidos:
+      type: object
+      properties:
+        idpedidos:
+          type: integer
+          format: int64
+          example: 1
+        fecha:
+          type: string
+          format: date
+          example: 2023-04-07
+          pattern: "YYYY-MM-DD"
+        monto_total: 
+           type: number
+           format: double
+           example: 75.00
+        estado:
+          type: string
+          example: enviado
+          enum:
+            - enviado
+            - no enviado
+        tipo_entrega:
+          type: string
+          example: delivery
+          enum: 
+            - delivery
+            - recojo en tienda
+        metodo_pago:
+          type: string
+          example: efectivo
+        idcliente:
+          $ref: '#/components/schemas/clientes'
+        idbodega:
+          $ref: '#/components/schemas/bodega'
+      xml: 
+        name: pedidos
+        
+    producto:
+      type: object
+      properties:
+        idproducto: 
+          type: integer
+          format: int64
+          example: 2
+        nombre:
+          type: string
+          example: Cerveza Pilsen
+        descripcion:
+          type: string
+          example: 1 unid | 355ml
+        precio:
+          type: number
+          format: double
+          example: 6.5
+        descuento: 
+          type: number
+          format: double
+          example: 0
+        stock:
+          type: integer
+          format: int46
+          example: 77
+        img:
+          type: string
+          example: pilsen355
+        idcategoria:
+          $ref: '#/components/schemas/categoria'
+        idbodega:
+          $ref: '#/components/schemas/bodega'
+      xml:
+        name: producto
+        
+    detalle_pedido:
+      type: object
+      properties:
+        cantidad:
+          type: integer
+          format: int64
+          example: 2
+        idpedido:
+           $ref: '#/components/schemas/pedidos'
+        idproducto:
+           $ref: '#/components/schemas/producto'
+      xml:
+        name: detalle_pedido
+  
+  requestBodies:
+    Producto:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/producto'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/producto'
+    UserArray:
+      description: List of user object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/producto'
+  securitySchemes:
+    aquinms_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://akinms/oauth/authorize
+          scopes:
+            write:akinms: modifica
+            read:akinms: visualiza
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
